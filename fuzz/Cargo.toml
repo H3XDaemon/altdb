@@ -1,0 +1,19 @@
+[package]
+name = "altdb-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+[package.metadata]
+cargo-fuzz = true
+[dependencies]
+libfuzzer-sys = "0.4"
+altdb = { path = ".." }
+serde_json = "1"
+[[bin]]
+name = "wire"
+path = "fuzz_targets/wire.rs"
+test = false
+doc = false
+bench = false
+[workspace]
+members = ["."]

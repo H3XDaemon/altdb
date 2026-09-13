@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.22)
+project(altdb_crypto LANGUAGES C CXX ASM)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
+add_subdirectory("${BORINGSSL_SOURCE_DIR}" boringssl EXCLUDE_FROM_ALL)
+add_library(altdb_crypto STATIC crypto.c)
+target_include_directories(altdb_crypto PRIVATE "${BORINGSSL_SOURCE_DIR}/include")
+target_link_libraries(altdb_crypto PRIVATE ssl crypto)
+target_compile_options(altdb_crypto PRIVATE -Wall -Wextra -Werror)
+

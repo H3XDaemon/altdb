@@ -1,0 +1,27 @@
+# Network parsing domain. Services themselves transition to shell (or ksu).
+type altdb_net domain
+# KernelSU already makes ksu permissive and grants domain -> ksu sigchld,
+# fd use, and unix_stream_socket { read write connectto getopt getattr }.
+# Do not repeat those grants. Additional inherited-socket operations below
+# are checked against the calling domain, even when the socket is ksu-labeled.
+# KernelSU's policy loader expects actual type names, not TE's self keyword.
+allow altdb_net altdb_net process { fork sigchld }
+allow altdb_net altdb_net fd use
+allow altdb_net shell fd use
+allow altdb_net ksu unix_stream_socket { setopt ioctl shutdown }
+allow altdb_net altdb_net unix_stream_socket { create read write getattr getopt setopt ioctl shutdown }
+allow altdb_net altdb_net tcp_socket { create read write getattr getopt setopt ioctl accept listen shutdown }
+allow altdb_net ksu tcp_socket { read write getattr getopt setopt ioctl accept listen shutdown }
+# Reverse listeners are created after the binder drops to shell. Their labels
+# remain shell when passed through the supervisor to the network process.
+allow altdb_net shell tcp_socket { read write getattr getopt setopt ioctl accept listen shutdown }
+allow altdb_net shell unix_stream_socket { read write getattr getopt setopt ioctl accept listen shutdown }
+allow altdb_net altdb_net udp_socket { read write getattr getopt setopt ioctl sendto recvfrom }
+allow altdb_net ksu udp_socket { read write getattr getopt setopt ioctl sendto recvfrom }
+allow altdb_net node node { recvfrom sendto }
+allow altdb_net netif netif { ingress egress }
+allow altdb_net system_file file { read open getattr map }
+allow altdb_net system_lib_file file { read open getattr map }
+allow altdb_net null_device chr_file { read write getattr }
+allow altdb_net random_device chr_file { read open getattr }
+allow shell ksu unix_stream_socket { setopt ioctl shutdown }

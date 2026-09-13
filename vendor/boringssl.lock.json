@@ -1,0 +1,7 @@
+{
+  "repository": "https://github.com/google/boringssl",
+  "revision": "a0cb538b0d0d08371d3bd5712bbc8d474d28090a",
+  "source": "AOSP external/boringssl android-16.0.0_r1 BORINGSSL_REVISION",
+  "sha256": "afae2b219681375a75b9bbcad105f0f13e54f46017efc894c68df7a7fc0e3a5f",
+  "archive": "https://codeload.github.com/google/boringssl/tar.gz/a0cb538b0d0d08371d3bd5712bbc8d474d28090a"
+}

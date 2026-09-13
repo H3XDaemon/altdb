@@ -1,0 +1,21 @@
+{
+  "name": "altdb-webui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit && vite build --base ./",
+    "dev": "vite --host 127.0.0.1",
+    "test": "node --test tests/*.test.mjs",
+    "format": "prettier --write src tests index.html package.json tsconfig.json ../scripts/preview-fixture.js",
+    "format:check": "prettier --check src tests index.html package.json tsconfig.json ../scripts/preview-fixture.js"
+  },
+  "dependencies": {
+    "kernelsu": "3.0.2"
+  },
+  "devDependencies": {
+    "prettier": "3.6.2",
+    "typescript": "7.0.2",
+    "vite": "8.3.0"
+  }
+}

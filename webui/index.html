@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'"
+    />
+    <meta name="color-scheme" content="dark light" />
+    <title>altdb</title>
+    <script type="module" src="./src/main.ts"></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <p class="eyebrow" data-i18n="eyebrow">WIRELESS DEBUGGING</p>
+          <h1>altdb<span class="dot">.</span></h1>
+        </div>
+        <div class="header-tools">
+          <span id="state" class="badge" data-i18n="connecting">Connecting</span>
+          <label class="language"
+            ><span data-i18n="language">Language</span
+            ><select id="language">
+              <option value="auto" data-i18n="language_auto">System</option>
+              <option value="en">English</option>
+              <option value="zh-CN">简体中文</option>
+            </select></label
+          >
+        </div>
+      </header>
+      <div id="notice" role="status" aria-live="polite" hidden></div>
+      <section class="card connection">
+        <div class="section-title">
+          <h2 data-i18n="connection_title">Device connection</h2>
+          <span id="identity" class="badge subtle">shell</span>
+        </div>
+        <p id="reason" class="muted" data-i18n="reading_status">Reading service status…</p>
+        <div id="endpoints" class="commands"></div>
+        <p class="hint" data-i18n="connection_hint">
+          Paired computers can discover this device or use the commands above.
+        </p>
+        <div class="metrics">
+          <span
+            ><b id="connections">0</b> <span data-i18n="connections">Active connections</span></span
+          ><span
+            ><b id="host-count">0</b> <span data-i18n="host_count">Paired computers</span></span
+          >
+        </div>
+      </section>
+      <section class="card">
+        <div class="section-title">
+          <h2 data-i18n="pair_title">Pair a computer</h2>
+          <span id="pair-time" class="muted" data-i18n="pair_manual">Open manually</span>
+        </div>
+        <p class="muted" data-i18n="pair_instructions">
+          Run the pairing command on your computer, then enter the six-digit code below.
+        </p>
+        <div id="pair-panel" hidden>
+          <div
+            id="pair-code"
+            class="pair-code"
+            aria-label="Pairing code"
+            data-i18n-aria-label="pair_code"
+          ></div>
+          <div id="pair-endpoints" class="commands"></div>
+        </div>
+        <button id="pair-toggle" class="primary" data-i18n="pair_start" disabled>
+          Start pairing
+        </button>
+        <p class="hint" data-i18n="pair_hint">
+          Valid for five minutes. Closes after one successful pairing.
+        </p>
+      </section>
+      <section class="card">
+        <h2 data-i18n="settings">Service settings</h2>
+        <form id="settings" novalidate>
+          <label class="toggle"
+            ><span
+              ><strong data-i18n="enable">Enable altdb</strong
+              ><small data-i18n="enable_hint"
+                >Pauses while system debugging is enabled and resumes when it is off</small
+              ></span
+            ><input id="enabled" type="checkbox" role="switch"
+          /></label>
+          <div class="field">
+            <label for="port-mode" data-i18n="port">Connection port</label
+            ><select id="port-mode">
+              <option value="random" data-i18n="port_random">Random port</option>
+              <option value="fixed" data-i18n="port_fixed">Fixed port</option>
+            </select>
+          </div>
+          <div id="fixed-field" class="field" hidden>
+            <label for="fixed-port" data-i18n="fixed_port">Port number</label
+            ><input
+              id="fixed-port"
+              type="number"
+              min="1024"
+              max="65535"
+              inputmode="numeric"
+              value="5555"
+              required
+            />
+          </div>
+          <p class="hint" data-i18n="port_hint">
+            Random ports change when the service restarts or recovers from a conflict.
+          </p>
+          <label class="toggle"
+            ><span
+              ><strong data-i18n="adb_root">Allow adb root</strong
+              ><small data-i18n="adb_root_hint"
+                >Computers can switch all connections to root; restarting restores shell</small
+              ></span
+            ><input id="allow-adb-root" type="checkbox" role="switch"
+          /></label>
+          <label class="toggle"
+            ><span
+              ><strong data-i18n="shell_root">Allow shell to use su</strong
+              ><small data-i18n="shell_root_hint"
+                >KernelSU must still authorize root access for shell</small
+              ></span
+            ><input id="allow-shell-root" type="checkbox" role="switch"
+          /></label>
+          <button id="save" class="primary" type="submit" data-i18n="save">Save settings</button>
+        </form>
+      </section>
+      <section class="card">
+        <div class="section-title">
+          <h2 data-i18n="hosts">Paired computers</h2>
+          <span class="muted" data-i18n="local_auth">Device authorizations</span>
+        </div>
+        <div id="hosts"><p class="muted" data-i18n="no_hosts">No paired computers</p></div>
+      </section>
+      <section class="card">
+        <div class="section-title">
+          <h2 data-i18n="logs">Diagnostics</h2>
+          <button id="refresh-logs" class="quiet" data-i18n="refresh">Refresh</button>
+        </div>
+        <pre id="logs" data-i18n="logs_prompt">Refresh to view service events</pre>
+      </section>
+      <footer>
+        altdb <span id="version">—</span> ·
+        <span data-i18n="footer">TLS-encrypted connections</span>
+      </footer>
+    </main>
+  </body>
+</html>

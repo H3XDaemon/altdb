@@ -1,0 +1,4 @@
+# IDE sync and plain cargo check must use Android's cfg and standard library,
+# even when the build script itself runs on Windows.
+[build]
+target = "aarch64-linux-android"

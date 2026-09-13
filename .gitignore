@@ -1,0 +1,13 @@
+/target/
+/.cache/
+/.idea/
+/vendor/boringssl/
+/dist/
+/webui/node_modules/
+/webui/dist/
+/fuzz/target/
+/fuzz/artifacts/
+/fuzz/corpus/
+*.log
+__pycache__/
+*.py[cod]
