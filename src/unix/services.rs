@@ -414,4 +414,36 @@ mod tests {
         assert!(ShellArgs::parse("tcpip:5555").is_err());
         assert!(ShellArgs::parse("reboot:recovery;id").is_err());
     }
+
+    #[test]
+    fn raw_shell_v2_ignores_window_size_changes() {
+        let (mut client, server) = UnixStream::pair().unwrap();
+        // Stock adb can send terminal sizes even when the remote shell is raw.
+        for (channel, data) in [
+            (5, b"24x80,0x0\0".as_slice()),
+            (0, b"before\n"),
+            (5, b"41x99,0x0\0"),
+            (0, b"after\0\xff\n"),
+            (4, b""),
+        ] {
+            protocol::shell_frame(&mut client, channel, data).unwrap();
+        }
+        client.shutdown(Shutdown::Write).unwrap();
+
+        let mut child = Command::new("sh")
+            .args(["-c", "cat; printf stderr >&2; exit 19"])
+            .process_group(0)
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .unwrap();
+        let stdin = File::from(OwnedFd::from(child.stdin.take().unwrap()));
+        input(server, stdin, true, false, child.id() as i32);
+        let output = child.wait_with_output().unwrap();
+
+        assert_eq!(output.status.code(), Some(19), "{:?}", output.status);
+        assert_eq!(output.stdout, b"before\nafter\0\xff\n");
+        assert_eq!(output.stderr, b"stderr");
+    }
 }
