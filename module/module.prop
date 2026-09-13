@@ -3,4 +3,4 @@ name=altdb
 version=v0.1.3
 versionCode=4
 author=Nullptr
-description=Alt adb server.
+description=Alternative adb server over local network
