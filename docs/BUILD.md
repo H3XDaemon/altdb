@@ -17,6 +17,16 @@ NDK 位于 Android Studio 默认 SDK 目录时无需设置路径；自定义 SDK
 
 需要完整模块时，再安装 Node.js 24 并运行 `python scripts/build.py`（Unix 也可用 `bash scripts/build.sh`）。它按锁文件构建 WebUI，生成 `dist/altdb-v0.1.3-arm64.zip` 及 `.zip.sha256`。包名从 Cargo 版本读取，并检查模块版本一致；支持通过 `CARGO_TARGET_DIR` 指定构建目录。ZIP 不包含 LICENSE、NOTICE 或依赖许可证目录，`scripts` 中没有 `.ps1`。
 
+构建并通过 adb 安装到已连接的手机：
+
+```text
+python scripts/build.py flash
+python scripts/build.py flash --reboot
+python scripts/build.py flash -s 192.168.1.2:5555 --reboot
+```
+
+`flash` 始终先完整构建，上传本次生成的 ZIP，再调用 KernelSU 的 `ksud module install`；命令的 stdout / stderr 合并后实时转发到当前终端或 IDE 输出窗口。默认不重启，`--reboot` 仅在安装成功后执行普通重启。它会清理本次上传的临时 ZIP，安装失败不会重启。`--binary-only` 不能与 `flash` 同用。
+
 也可直接运行等价的 binary 构建命令：
 
 ```text
