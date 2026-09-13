@@ -75,10 +75,7 @@ assert (ROOT / "webui/dist/index.html").is_file(), "Build WebUI first"
 files = {
     "bin/altdb": binary,
     "README.md": ROOT / "README.md",
-    "VALIDATION.md": ROOT / "docs/VALIDATION.md",
 }
-for path in (ROOT / "docs").glob("*.md"):
-    files["docs/" + path.name] = path
 for folder, prefix in [(ROOT / "module", ""), (ROOT / "webui/dist", "webroot/")]:
     for path in folder.rglob("*"):
         if path.is_file():
