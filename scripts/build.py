@@ -83,15 +83,12 @@ def main():
     )
     run(sys.executable, ROOT / "scripts/package.py", "--check-binary")
     if not args.binary_only:
-        npm = "npm.cmd" if os.name == "nt" else "npm"
-        run(npm, "ci", "--no-audit", "--no-fund", cwd=ROOT / "webui")
-        run(npm, "run", "build", cwd=ROOT / "webui")
+        run("pnpm", "install", "--frozen-lockfile", cwd=ROOT / "webui")
+        run("pnpm", "run", "build", cwd=ROOT / "webui")
         run(sys.executable, ROOT / "scripts/package.py")
     if args.action == "flash":
         adb = ["adb"] + (["-s", args.serial] if args.serial else [])
-        version = tomllib.loads((ROOT / "Cargo.toml").read_text(encoding="utf-8"))["package"][
-            "version"
-        ]
+        version = tomllib.loads((ROOT / "Cargo.toml").read_text(encoding="utf-8"))["package"]["version"]
         flash(adb, ROOT / f"dist/altdb-v{version}-arm64.zip", args.reboot)
 
 
